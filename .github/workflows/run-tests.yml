@@ -12,16 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Symfony
-        working-directory: ./backend
       - name: Install Python
+        working-directory: ./backend
         uses: actions/setup-python@v2
         with:
           python-version: 3.11
       - name: Install Deps
+        working-directory: ./backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run tests
+        working-directory: ./backend
         run: |
           python manage.py test
