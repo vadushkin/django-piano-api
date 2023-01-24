@@ -9,3 +9,22 @@ services:
       - backend/.env
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - django_network
+
+  db:
+    build: db
+    restart: always
+    container_name: "db_piano"
+    env_file:
+      - backend/.env
+    ports:
+      - "5433:5432"
+    networks:
+      - django_network
+
+networks:
+  django_network:
+    driver: bridge
