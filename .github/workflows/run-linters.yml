@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run Code Checks
 
 
 on:
@@ -21,7 +21,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run tests
+      - name: Run flake8
         working-directory: ./backend
-        run: |
-          python manage.py test
+        run: flake8 .
+      - name: Run mypy
+        working-directory: ./backend
+        run: mypy .
