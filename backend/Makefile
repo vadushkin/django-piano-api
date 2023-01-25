@@ -4,7 +4,6 @@ format:
 	@autoflake --in-place --remove-all-unused-imports  --ignore-init-module-imports -r .
 	@flake8 .
 	@mypy .
-	@isort .
 	@black .
 
 push:
