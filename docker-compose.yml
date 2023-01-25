@@ -1,14 +1,24 @@
 version: "3"
 
 services:
+  web:
+    container_name: "web"
+    build: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app/conf.d:/etc/nginx/conf.d
+    networks:
+      - django_network
+    depends_on:
+      - backend
+
   backend:
     build: backend
-    container_name: "backend_piano"
+    container_name: "backend"
     restart: unless-stopped
     env_file:
       - backend/.env
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     networks:
@@ -17,7 +27,7 @@ services:
   db:
     build: db
     restart: always
-    container_name: "db_piano"
+    container_name: "db"
     env_file:
       - backend/.env
     ports:
