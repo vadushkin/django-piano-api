@@ -23,6 +23,7 @@ psycopg2-binary = "2.9.5"
 django-rest-framework = "^0.1.0"
 django-cors-headers = "^3.13.0"
 pyjwt = "^2.6.0"
+cloudinary = "^1.31.0"
 
 
 [build-system]
