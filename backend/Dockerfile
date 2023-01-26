@@ -4,6 +4,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
+
+RUN mkdir -p /home/app/staticfiles
+
 COPY poetry.lock pyproject.toml /usr/src/app/
 
 RUN pip3 install poetry
