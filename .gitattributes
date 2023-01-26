@@ -1,1 +1,4 @@
-backend/staticfiles/* linguist-vendored
+*.js linguist-language=false
+*.css linguist-language=false
+
+staticfiles/* linguist-vendored
