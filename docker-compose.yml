@@ -16,9 +16,12 @@ services:
   backend:
     build: backend
     container_name: "backend"
+    command: poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000
     restart: unless-stopped
     env_file:
       - backend/.env
+    expose:
+      - 8000
     depends_on:
       - db
     networks:
