@@ -16,26 +16,26 @@ class GetRoutesView(APIView):
             {
                 'Endpoint': '/register/',
                 'method': 'POST',
-                'body': {'body': ""},
-                'description': 'Registers you'
+                'body': {"name": "Require", "email": "Require", "password": "Require", "photo": "Not Require"},
+                'description': 'Registers you',
             },
             {
                 'Endpoint': '/login/',
-                'method': 'GET',
-                'body': None,
-                'description': 'Returns a single sheet object'
+                'method': 'POST',
+                'body': {"email": "Require", "password": "Require"},
+                'description': 'Logins you',
             },
             {
                 'Endpoint': '/logout/',
                 'method': 'POST',
-                'body': {'body': ""},
-                'description': 'Creates new sheet with data sent in post request'
+                'body': None,
+                'description': 'Logouts you',
             },
             {
                 'Endpoint': '/user/',
-                'method': 'PUT',
-                'body': {'body': ""},
-                'description': 'Creates an existing sheet with data sent in post request'
+                'method': 'GET',
+                'body': None,
+                'description': 'Returns your data if you are registered',
             },
         ]
 

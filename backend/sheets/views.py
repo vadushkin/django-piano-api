@@ -1,46 +1,61 @@
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .services import get_sheet_details, create_sheet, \
     get_list_of_sheets, update_sheet, delete_sheet
 
+routes = [
+    {
+        'Endpoint': '/sheets/',
+        'method': 'GET',
+        'body': None,
+        'description': 'Returns an array of sheets'
+    },
+    {
+        'Endpoint': '/sheets/',
+        'method': 'POST',
+        'body': {
+            "name": "Require",
+            "user": "Require",
+            "file_pdf": "Require",
+            "author": "Not Require",
+            "description": "Not Require",
+            "category": "Not Require",
+            "tags": "Not Require",
+        },
+        'description': 'Creates new sheet with data sent in post request'
+    },
+    {
+        'Endpoint': '/sheet/:id',
+        'method': 'GET',
+        'body': None,
+        'description': 'Returns a single sheet object'
+    },
+    {
+        'Endpoint': '/sheet/:id',
+        'method': 'PUT',
+        'body': {
+            "name": "",
+            "user": "",
+            "file_pdf": "",
+            "author": "",
+            "description": "",
+            "category": "",
+            "tags": "",
+        },
+        'description': 'Creates an existing sheet with data sent in post request'
+    },
+    {
+        'Endpoint': '/sheets/:id',
+        'method': 'DELETE',
+        'body': None,
+        'description': 'Deletes and exiting sheet'
+    },
+]
+
 
 @api_view(['GET'])
 def get_routes(_):
-    routes = [
-        {
-            'Endpoint': '/sheets/',
-            'method': 'GET',
-            'body': None,
-            'description': 'Returns an array of sheets'
-        },
-        {
-            'Endpoint': '/sheets/id',
-            'method': 'GET',
-            'body': None,
-            'description': 'Returns a single sheet object'
-        },
-        {
-            'Endpoint': '/sheets/create/',
-            'method': 'POST',
-            'body': {'body': ""},
-            'description': 'Creates new sheet with data sent in post request'
-        },
-        {
-            'Endpoint': '/sheets/id/update/',
-            'method': 'PUT',
-            'body': {'body': ""},
-            'description': 'Creates an existing sheet with data sent in post request'
-        },
-        {
-            'Endpoint': '/sheets/id/delete/',
-            'method': 'DELETE',
-            'body': None,
-            'description': 'Deletes and exiting sheet'
-        },
-    ]
-
     return Response(routes)
 
 

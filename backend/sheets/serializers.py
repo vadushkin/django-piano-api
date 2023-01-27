@@ -4,6 +4,8 @@ from .models import Sheet
 
 
 class SheetSerializer(serializers.ModelSerializer):
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Sheet
-        fields = "__all__"
+        exclude = ('photo',)

@@ -23,14 +23,13 @@ def get_sheet_details(_, pk):
 
 
 def create_sheet(request):
-    sheet = Sheet.objects.create(
-        body=request.data['body'],
-    )
-    serializer = SheetSerializer(
-        instance=sheet,
-        many=False,
-    )
-    return Response(serializer.data)
+    serializer = SheetSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors)
 
 
 def update_sheet(request, pk):
@@ -41,8 +40,9 @@ def update_sheet(request, pk):
 
     if serializer.is_valid():
         serializer.save()
-
-    return Response(serializer.data)
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors)
 
 
 def delete_sheet(_, pk):
