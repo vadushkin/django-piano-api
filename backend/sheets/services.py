@@ -6,7 +6,7 @@ from .serializers import SheetSerializer
 
 
 def get_list_of_sheets(_):
-    sheets = Sheet.objects.all().order_by('-updated_at')
+    sheets = Sheet.objects.all().order_by("-updated_at")
     serializer = SheetSerializer(
         instance=sheets,
         many=True,
@@ -47,4 +47,4 @@ def update_sheet(request, pk):
 
 def delete_sheet(_, pk):
     get_object_or_404(Sheet, pk=pk).delete()
-    return Response('Sheet was deleted!')
+    return Response("Sheet was deleted!")

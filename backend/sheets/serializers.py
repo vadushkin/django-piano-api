@@ -8,4 +8,4 @@ class SheetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sheet
-        exclude = ('photo',)
+        exclude = ("photo",)

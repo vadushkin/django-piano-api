@@ -14,28 +14,33 @@ class GetRoutesView(APIView):
     def get(self, request):
         routes = [
             {
-                'Endpoint': '/register/',
-                'method': 'POST',
-                'body': {"name": "Require", "email": "Require", "password": "Require", "photo": "Not Require"},
-                'description': 'Registers you',
+                "Endpoint": "/register/",
+                "method": "POST",
+                "body": {
+                    "name": "Require",
+                    "email": "Require",
+                    "password": "Require",
+                    "photo": "Not Require",
+                },
+                "description": "Registers you",
             },
             {
-                'Endpoint': '/login/',
-                'method': 'POST',
-                'body': {"email": "Require", "password": "Require"},
-                'description': 'Logins you',
+                "Endpoint": "/login/",
+                "method": "POST",
+                "body": {"email": "Require", "password": "Require"},
+                "description": "Logins you",
             },
             {
-                'Endpoint': '/logout/',
-                'method': 'POST',
-                'body': None,
-                'description': 'Logouts you',
+                "Endpoint": "/logout/",
+                "method": "POST",
+                "body": None,
+                "description": "Logouts you",
             },
             {
-                'Endpoint': '/user/',
-                'method': 'GET',
-                'body': None,
-                'description': 'Returns your data if you are registered',
+                "Endpoint": "/user/",
+                "method": "GET",
+                "body": None,
+                "description": "Returns your data if you are registered",
             },
         ]
 
