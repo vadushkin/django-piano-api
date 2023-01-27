@@ -10,6 +10,38 @@ from .models import User
 from .serializers import UserSerializer
 
 
+class GetRoutesView(APIView):
+    def get(self, request):
+        routes = [
+            {
+                'Endpoint': '/register/',
+                'method': 'POST',
+                'body': {'body': ""},
+                'description': 'Registers you'
+            },
+            {
+                'Endpoint': '/login/',
+                'method': 'GET',
+                'body': None,
+                'description': 'Returns a single sheet object'
+            },
+            {
+                'Endpoint': '/logout/',
+                'method': 'POST',
+                'body': {'body': ""},
+                'description': 'Creates new sheet with data sent in post request'
+            },
+            {
+                'Endpoint': '/user/',
+                'method': 'PUT',
+                'body': {'body': ""},
+                'description': 'Creates an existing sheet with data sent in post request'
+            },
+        ]
+
+        return Response(routes)
+
+
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)

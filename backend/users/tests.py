@@ -4,9 +4,9 @@ from rest_framework.test import APITestCase
 
 
 class TestAuthentication(APITestCase):
-    login_url = "/api/login/"
-    register_url = "/api/register/"
-    logout_url = "/api/logout/"
+    login_url = "/users/login/"
+    register_url = "/users/register/"
+    logout_url = "/users/logout/"
 
     def test_register(self):
         # test case
