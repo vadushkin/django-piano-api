@@ -8,6 +8,7 @@ from users.models import User
 class Author(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}"
@@ -21,7 +22,7 @@ class Author(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}"
@@ -35,7 +36,7 @@ class Tag(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name}"
@@ -56,8 +57,9 @@ class Sheet(models.Model):
             ),
         ],
     )
-    photo = models.ImageField()
+    photo = models.ImageField(max_length=200)
     description = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ForeignKey(
         Category,
@@ -81,7 +83,7 @@ class Sheet(models.Model):
         output = f"{self.file_pdf.path[:-4]}.jpg"
         pil_image.save(output)
         page.close()
-        Sheet.objects.filter(pk=self.pk).update(photo=f"{self.file_pdf.path[:-4]}.jpg")
+        Sheet.objects.filter(pk=self.pk).update(photo=f"{self.file_pdf.url[:-4]}.jpg")
 
     class Meta:
         verbose_name = "Sheet"

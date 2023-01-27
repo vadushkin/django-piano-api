@@ -9,6 +9,7 @@ class SheetAdminModel(admin.ModelAdmin):
         "id",
         "name",
         "category",
+        "user",
         "author",
         "description",
         "file_pdf",
@@ -24,6 +25,7 @@ class SheetAdminModel(admin.ModelAdmin):
         "description",
         "file_pdf",
         "get_photo",
+        "user",
         "author",
         "category",
         "tags",
@@ -34,20 +36,38 @@ class SheetAdminModel(admin.ModelAdmin):
 
     def get_photo(self, obj):
         if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" width="100">')
+            return mark_safe(f'<img src="{obj.photo}" width="100">')
         else:
             return "Photo doesn't exist"
 
 
 class TagAdminModel(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "slug",
+        "user",
+    )
     prepopulated_fields = {"slug": ("name",)}
 
 
 class CategoryAdminModel(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "slug",
+        "user",
+    )
     prepopulated_fields = {"slug": ("name",)}
 
 
 class AuthorAdminModel(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "slug",
+        "user",
+    )
     prepopulated_fields = {"slug": ("name",)}
 
 
