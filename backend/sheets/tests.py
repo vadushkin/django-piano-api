@@ -45,6 +45,8 @@ class TestSheets(APITestCase):
         file1 = open("test_payloads/Bethoven_Bagatelle_25.pdf", "rb")
         file2 = open("test_payloads/Shopen_Frederik_Etud_op10_12.pdf", "rb")
         file3 = open("test_payloads/Rahmaninov_Sergeiy_Preludiya_op32_2.pdf", "rb")
+        file4 = open("test_payloads/Never_Gonna_Give_You_Up.pdf", "rb")
+        file5 = open("test_payloads/Griboedov_2_waltz.pdf", "rb")
 
         # test payloads
         test_payload1 = {
@@ -123,6 +125,85 @@ class TestSheets(APITestCase):
         self.assertEqual(response.data.get("name"), "Spruce")
         # check that user is not changed
         self.assertEqual(response.data.get("user"), 1)
+
+        ################################################################################
+        # Put #
+        ################################################################################
+
+        test_update_data1 = {
+            "name": "Herringbone",
+            "file_pdf": file4,
+            "user": 2,
+        }
+
+        test_update_data2 = {
+            "name": "Christmas Tree",
+            "file_pdf": file5,
+            "user": 2,
+        }
+
+        # response from server
+        response = self.client.put(
+            self.sheets_url + "1/",
+            data=test_update_data1,
+        )
+        # check good error
+        self.assertEqual(response.status_code, 200)
+        # check that name and user were changed
+        self.assertEqual(response.data.get("name"), "Herringbone")
+        self.assertEqual(response.data.get("user"), 2)
+
+        # response from server
+        response = self.client.put(
+            self.sheets_url + "2/",
+            data=test_update_data2,
+        )
+        # check good error
+        self.assertEqual(response.status_code, 200)
+        # check that name and user were changed
+        self.assertEqual(response.data.get("name"), "Christmas Tree")
+        self.assertEqual(response.data.get("user"), 2)
+
+        ################################################################################
+        # Get #
+        ################################################################################
+
+        # response from server
+        response = self.client.get(
+            self.sheets_url,
+        )
+        # check good error
+        self.assertEqual(response.status_code, 200)
+        # check that we got data
+        self.assertTrue(len(response.data) > 0)
+
+        # response from server
+        response = self.client.get(
+            self.sheets_url + "1/",
+        )
+        # check bad error
+        self.assertEqual(response.status_code, 200)
+        # check that we got the first one
+        self.assertEqual(response.data.get("name"), "Herringbone")
+        self.assertEqual(response.data.get("user"), 2)
+
+        ################################################################################
+        # Delete #
+        ################################################################################
+
+        # response from server
+        response = self.client.delete(
+            self.sheets_url + "1/",
+        )
+        # alright?
+        self.assertEqual(response.status_code, 204)
+
+        # response from server
+        response = self.client.delete(
+            self.sheets_url + "2/",
+        )
+        # nice.
+        self.assertEqual(response.status_code, 204)
 
 
 class TestCategories(APITestCase):
