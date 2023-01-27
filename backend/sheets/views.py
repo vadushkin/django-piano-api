@@ -2,61 +2,19 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Sheet, Tag, Category, Author
-from .serializers import SheetSerializer, CategorySerializer, AuthorSerializer, TagSerializer
-
-routes = [
-    {
-        "Endpoint": "/sheets/",
-        "method": "GET",
-        "body": None,
-        "description": "Returns an array of sheets",
-    },
-    {
-        "Endpoint": "/sheets/",
-        "method": "POST",
-        "body": {
-            "name": "Require",
-            "user": "Require",
-            "file_pdf": "Require",
-            "author": "Not Require",
-            "description": "Not Require",
-            "category": "Not Require",
-            "tags": "Not Require",
-        },
-        "description": "Creates new sheet with data sent in post request",
-    },
-    {
-        "Endpoint": "/sheet/:id",
-        "method": "GET",
-        "body": None,
-        "description": "Returns a single sheet object",
-    },
-    {
-        "Endpoint": "/sheet/:id",
-        "method": "PUT",
-        "body": {
-            "name": "",
-            "user": "",
-            "file_pdf": "",
-            "author": "",
-            "description": "",
-            "category": "",
-            "tags": "",
-        },
-        "description": "Creates an existing sheet with data sent in post request",
-    },
-    {
-        "Endpoint": "/sheets/:id",
-        "method": "DELETE",
-        "body": None,
-        "description": "Deletes and exiting sheet",
-    },
-]
+from .models import Author, Category, Sheet, Tag
+from .serializers import (
+    AuthorSerializer,
+    CategorySerializer,
+    SheetSerializer,
+    TagSerializer,
+)
+from .services import _get_routes
 
 
 @api_view(["GET"])
 def get_routes(_):
+    routes = _get_routes()
     return Response(routes)
 
 
@@ -78,6 +36,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
 
 # @api_view(["GET", "POST"])
 # def get_sheets(request):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Sheet, Category, Tag, Author
+from .models import Author, Category, Sheet, Tag
 
 
 class SheetSerializer(serializers.ModelSerializer):
