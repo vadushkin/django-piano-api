@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # applications
     "users.apps.UsersConfig",
+    "sheets.apps.SheetsConfig",
     # libraries
     "rest_framework",
     "corsheaders",
