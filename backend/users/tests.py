@@ -8,7 +8,28 @@ class TestAuthentication(APITestCase):
     register_url = "/users/register/"
     logout_url = "/users/logout/"
 
-    def test_register(self):
+    def test_register_with_cookies(self):
+        # set cookies
+        self.client.cookies = SimpleCookie({"jwt": "123456789"})
+
+        # test case
+        test_payload = {
+            "name": "oak",
+            "email": "oak@oak.com",
+            "password": "oak",
+        }
+        # response from server
+        response = self.client.post(
+            self.register_url,
+            data=test_payload,
+        )
+
+        # check if we get 200
+        self.assertEqual(response.status_code, 200)
+        # check if we get message
+        self.assertEqual(response.data.get("message"), "You're authenticated!")
+
+    def test_register_without_cookies(self):
         # test case
         test_payload = {
             "name": "oak",
@@ -29,9 +50,29 @@ class TestAuthentication(APITestCase):
         # check if we get password in response
         self.assertIsNone(response.data.get("password"))
 
-    def test_login(self):
+    def test_login_with_cookies(self):
+        # set cookies
+        self.client.cookies = SimpleCookie({"jwt": "123456789"})
+
+        # test case
+        test_payload = {
+            "email": "oak@oak.com",
+            "password": "oak",
+        }
+        # response from server
+        response = self.client.post(
+            self.login_url,
+            data=test_payload,
+        )
+
+        # check if we get 200
+        self.assertEqual(response.status_code, 200)
+        # check if we get message against authorization
+        self.assertEqual(response.data.get("message"), "You're authenticated!")
+
+    def test_login_without_cookies(self):
         # create oak-account
-        self.test_register()
+        self.test_register_without_cookies()
         # test case
         test_payload = {
             "email": "oak@oak.com",
@@ -53,7 +94,7 @@ class TestAuthentication(APITestCase):
         self.client.cookies = SimpleCookie({"jwt": "123456789"})
 
         # response from server
-        response = self.client.post(
+        response = self.client.get(
             self.logout_url,
         )
 
@@ -64,7 +105,7 @@ class TestAuthentication(APITestCase):
 
     def test_logout_without_cookies(self):
         # response from server
-        response = self.client.post(
+        response = self.client.get(
             self.logout_url,
         )
 

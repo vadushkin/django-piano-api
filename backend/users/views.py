@@ -32,7 +32,7 @@ class GetRoutesView(APIView):
             },
             {
                 "Endpoint": "/logout/",
-                "method": "POST",
+                "method": "GET",
                 "body": None,
                 "description": "Logouts you",
             },
@@ -49,6 +49,15 @@ class GetRoutesView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
+        token = request.COOKIES.get("jwt")
+
+        if token:
+            response = Response()
+            response.data = {
+                "message": "You're authenticated!",
+            }
+            return response
+
         serializer = UserSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
@@ -59,6 +68,15 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     def post(self, request):
+        token = request.COOKIES.get("jwt")
+
+        if token:
+            response = Response()
+            response.data = {
+                "message": "You're authenticated!",
+            }
+            return response
+
         email = request.data["email"]
         password = request.data["password"]
 
