@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -24,6 +24,12 @@ class SheetViewSet(viewsets.ModelViewSet):
     serializer_class = SheetSerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
+    def get_queryset(self):
+        self.request.user = get_current_user(self.request)
+        queryset = Sheet.objects.filter(user=self.request.user)
+
+        return queryset
+
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
         return super().create(request, *args, **kwargs)
@@ -34,17 +40,29 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
+    def create(self, request, *args, **kwargs):
+        request.user = get_current_user(request)
+        return super().create(request, *args, **kwargs)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
+    def create(self, request, *args, **kwargs):
+        request.user = get_current_user(request)
+        return super().create(request, *args, **kwargs)
+
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     permission_classes = (IsOwnerOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+        request.user = get_current_user(request)
+        return super().create(request, *args, **kwargs)
 
 # @api_view(["GET", "POST"])
 # def get_sheets(request):

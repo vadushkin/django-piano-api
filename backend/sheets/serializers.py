@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import Author, Category, Sheet, Tag
+
+
 # from .services import get_current_user
 
 
@@ -9,7 +11,7 @@ class SheetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sheet
-        exclude = ("photo", )
+        exclude = ("photo",)
 
     # def save(self, **kwargs):
     #     user = None

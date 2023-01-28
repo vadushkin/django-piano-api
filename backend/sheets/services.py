@@ -221,15 +221,16 @@ def _get_routes():
 
 
 def get_current_user(request):
+    """Get the current user on request"""
     token = request.COOKIES.get("jwt")
 
     if not token:
-        return None
+        return False
 
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
-        return None
+        return False
 
     user = User.objects.filter(id=payload["id"]).first()
     return user

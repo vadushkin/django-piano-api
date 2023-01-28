@@ -1,8 +1,8 @@
-from django.conf import settings
-import jwt
+from django.http import Http404
 from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS
 
-from users.models import User
+from sheets.services import get_current_user
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -16,17 +16,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        token = request.COOKIES.get("jwt")
-
-        if not token:
-            return False
-
-        try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            return False
-
-        user = User.objects.filter(id=payload["id"]).first()
+        user = get_current_user(request)
 
         # Write permissions are only allowed to the owner of the snippet.
         return obj.user == user
