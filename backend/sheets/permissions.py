@@ -1,6 +1,4 @@
-from django.http import Http404
 from rest_framework import permissions
-from rest_framework.permissions import SAFE_METHODS
 
 from sheets.services import get_current_user
 
@@ -20,3 +18,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the owner of the snippet.
         return obj.user == user
+
+
+class IsAuthenticatedCustom(permissions.BasePermission):
+    """
+    Custom permission to only authenticated people.
+    """
+
+    def has_permission(self, request, view):
+        user = get_current_user(request)
+        return True if user else False

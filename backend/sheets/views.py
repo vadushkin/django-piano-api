@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Author, Category, Sheet, Tag
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsAuthenticatedCustom
 from .serializers import (
     AuthorSerializer,
     CategorySerializer,
@@ -22,7 +22,7 @@ def get_routes(_):
 class SheetViewSet(viewsets.ModelViewSet):
     queryset = Sheet.objects.all()
     serializer_class = SheetSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedCustom, IsOwnerOrReadOnly)
 
     def get_queryset(self):
         self.request.user = get_current_user(self.request)
@@ -38,7 +38,13 @@ class SheetViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedCustom, IsOwnerOrReadOnly)
+
+    def get_queryset(self):
+        self.request.user = get_current_user(self.request)
+        queryset = Tag.objects.filter(user=self.request.user)
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
@@ -48,7 +54,13 @@ class TagViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedCustom, IsOwnerOrReadOnly)
+
+    def get_queryset(self):
+        self.request.user = get_current_user(self.request)
+        queryset = Category.objects.filter(user=self.request.user)
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
@@ -58,7 +70,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticatedCustom, IsOwnerOrReadOnly)
+
+    def get_queryset(self):
+        self.request.user = get_current_user(self.request)
+        queryset = Author.objects.filter(user=self.request.user)
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
