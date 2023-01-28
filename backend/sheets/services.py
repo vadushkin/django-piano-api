@@ -48,6 +48,10 @@
 # def delete_sheet(_, pk):
 #     get_object_or_404(Sheet, pk=pk).delete()
 #     return Response("Sheet was deleted!")
+from django.conf import settings
+import jwt
+
+from users.models import User
 
 
 def _get_routes():
@@ -214,3 +218,18 @@ def _get_routes():
         },
     ]
     return routes
+
+
+def get_current_user(request):
+    token = request.COOKIES.get("jwt")
+
+    if not token:
+        return None
+
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        return None
+
+    user = User.objects.filter(id=payload["id"]).first()
+    return user

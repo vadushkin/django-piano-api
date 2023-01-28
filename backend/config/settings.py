@@ -154,3 +154,9 @@ cloudinary.config(
     api_secret=os.getenv("API_SECRET"),
     secure=True,
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
