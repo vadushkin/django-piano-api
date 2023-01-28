@@ -71,7 +71,6 @@ class TestSheets(APITestCase):
             "file_pdf": file1,
             "description": "Beethoven",
             "user": 1,
-
         }
         test_payload2 = {
             "name": "Etude op10 12",

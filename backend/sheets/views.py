@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Author, Category, Sheet, Tag
-from .permissions import IsOwnerOrReadOnly, IsAuthenticatedCustom
+from .permissions import IsAuthenticatedCustom, IsOwnerOrReadOnly
 from .serializers import (
     AuthorSerializer,
     CategorySerializer,
@@ -81,6 +81,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
         return super().create(request, *args, **kwargs)
+
 
 # @api_view(["GET", "POST"])
 # def get_sheets(request):
