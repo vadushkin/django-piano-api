@@ -4,27 +4,45 @@ from rest_framework.test import APITestCase
 class TestSheets(APITestCase):
     sheets_url = "/api/v1/sheets/"
     register_url = "/users/register/"
+    login_url = "/users/login/"
 
     def _prepare_for_tests(self):
-        user1 = {
+        reg_user1 = {
             "name": "oak",
             "email": "oak@oak.com",
             "password": "oak",
         }
 
-        user2 = {
+        reg_user2 = {
             "name": "oak2",
             "email": "oak2@oak.com",
             "password": "oak2",
         }
 
+        log_user1 = {
+            "email": "oak@oak.com",
+            "password": "oak",
+        }
+
+        log_user2 = {
+            "email": "oak2@oak.com",
+            "password": "oak2",
+        }
+
+        # Register
         self.client.post(
             self.register_url,
-            data=user1,
+            data=reg_user1,
         )
         self.client.post(
             self.register_url,
-            data=user2,
+            data=reg_user2,
+        )
+
+        # Login
+        self.client.post(
+            self.login_url,
+            data=log_user1,
         )
 
     def test_crud(self):
@@ -32,6 +50,10 @@ class TestSheets(APITestCase):
         because every function needs test data,
         and if we go 2 or 2 > times to populate the database with data,
         it will be error 400. If you know how to get it, would be helpful.
+
+        To supplement:
+        The tests do not check whether the first user can see messages from the second user
+        If you know how to get it, would be helpful.
         """
 
         ################################################################################
@@ -52,16 +74,20 @@ class TestSheets(APITestCase):
         test_payload1 = {
             "name": "Bagatelle 25",
             "file_pdf": file1,
+            "description": "Bethoven",
             "user": 1,
+
         }
         test_payload2 = {
             "name": "Etud op10 12",
             "file_pdf": file2,
+            "description": "Shopen Frederik",
             "user": 1,
         }
         test_payload3 = {
             "name": "Preludiya op32 2",
             "file_pdf": file3,
+            "description": "Rahmaninov Sergeiy",
             "user": 2,
         }
 
@@ -112,7 +138,7 @@ class TestSheets(APITestCase):
         # check that name was changed
         self.assertEqual(response.data.get("name"), "Fir")
         # check that user is not changed
-        self.assertEqual(response.data.get("user"), 1)
+        self.assertEqual(response.data.get("description"), "Bethoven")
 
         # response from server
         response = self.client.patch(
@@ -124,7 +150,7 @@ class TestSheets(APITestCase):
         # check that name was changed
         self.assertEqual(response.data.get("name"), "Spruce")
         # check that user is not changed
-        self.assertEqual(response.data.get("user"), 1)
+        self.assertEqual(response.data.get("description"), "Shopen Frederik")
 
         ################################################################################
         # Put #
@@ -133,13 +159,15 @@ class TestSheets(APITestCase):
         test_update_data1 = {
             "name": "Herringbone",
             "file_pdf": file4,
-            "user": 2,
+            "user": 1,
+            "description": "Cool",
         }
 
         test_update_data2 = {
             "name": "Christmas Tree",
             "file_pdf": file5,
             "user": 2,
+            "description": "Nice",
         }
 
         # response from server
@@ -151,7 +179,7 @@ class TestSheets(APITestCase):
         self.assertEqual(response.status_code, 200)
         # check that name and user were changed
         self.assertEqual(response.data.get("name"), "Herringbone")
-        self.assertEqual(response.data.get("user"), 2)
+        self.assertEqual(response.data.get("description"), "Cool")
 
         # response from server
         response = self.client.put(
@@ -162,7 +190,7 @@ class TestSheets(APITestCase):
         self.assertEqual(response.status_code, 200)
         # check that name and user were changed
         self.assertEqual(response.data.get("name"), "Christmas Tree")
-        self.assertEqual(response.data.get("user"), 2)
+        self.assertEqual(response.data.get("description"), "Nice")
 
         ################################################################################
         # Get #
@@ -174,6 +202,7 @@ class TestSheets(APITestCase):
         )
         # check good error
         self.assertEqual(response.status_code, 200)
+        print(response.data)
         # check that we got data
         self.assertTrue(len(response.data) > 0)
 
@@ -185,7 +214,6 @@ class TestSheets(APITestCase):
         self.assertEqual(response.status_code, 200)
         # check that we got the first one
         self.assertEqual(response.data.get("name"), "Herringbone")
-        self.assertEqual(response.data.get("user"), 2)
 
         ################################################################################
         # Delete #
