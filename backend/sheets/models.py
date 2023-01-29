@@ -1,7 +1,7 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
-import pypdfium2 as pdfium
 
+from tasks.tasks import create_task_photo_of_pdf
 from users.models import User
 
 
@@ -77,13 +77,7 @@ class Sheet(models.Model):
 
     def save(self, *args, **kwargs):
         super(Sheet, self).save(*args, **kwargs)
-        pdf = pdfium.PdfDocument(f"{self.file_pdf.path}")
-        page = pdf.get_page(0)
-        pil_image = page.render_topil()
-        output = f"{self.file_pdf.path[:-4]}.jpg"
-        pil_image.save(output)
-        page.close()
-        Sheet.objects.filter(pk=self.pk).update(photo=f"{self.file_pdf.url[:-4]}.jpg")
+        create_task_photo_of_pdf.delay(self.pk, self.file_pdf.path, self.file_pdf.url)
 
     class Meta:
         verbose_name = "Sheet"
