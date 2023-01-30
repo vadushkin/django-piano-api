@@ -1,3 +1,5 @@
+import time
+
 from celery import shared_task
 import pypdfium2 as pdfium
 
