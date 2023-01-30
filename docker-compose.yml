@@ -1,70 +1,82 @@
 version: "3"
 
 services:
-  web:
-    container_name: "web"
-    build: nginx
-    ports:
-      - "8000:80"
-    volumes:
-      - ./app/conf.d:/etc/nginx/conf.d
-      - static_files:/home/app/staticfiles
-    networks:
-      - django_network
-    depends_on:
-      - backend
-
-#  celery:
-#    build: ./backend
-#    container_name: "celery"
-#    command: poetry run celery --app=config worker --loglevel=info
+#  web:
+#    container_name: "web"
+#    build: nginx
+#    ports:
+#      - "8000:80"
 #    volumes:
-#      - ./backend:/usr/src/app
-#    env_file:
-#      - backend/.env
+#      - ./app/conf.d:/etc/nginx/conf.d
+#      - static_files:/home/app/staticfiles
+#    networks:
+#      - django_network
 #    depends_on:
 #      - backend
-#      - redis
+
+  celery:
+    build: ./backend
+    container_name: "celery"
+    command: celery --app=config worker --loglevel=info --logfile=logs/celery.log
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-a#8y#ne9bw=h(cpk$c37n8s7i+f+%qlq1y5xdmod0#l6am-34g
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+#    env_file:
+#      - backend/.env
+    depends_on:
+      - backend
+      - redis
 
   backend:
     build: backend
     container_name: "backend"
-    command: poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000
-    restart: unless-stopped
-    volumes:
-      - ./backend/:/usr/src/app/
-      - static_files:/usr/src/app/staticfiles
-    env_file:
-      - backend/.env
-    expose:
-      - 8000
-    depends_on:
-      - db
-#      - redis
-    networks:
-      - django_network
-
-#  redis:
-#    image: redis:5-alpine
-#    container_name: "redis"
-#    restart: unless-stopped
-#    ports:
-#      - "127.0.0.1:6379:6379"
-
-  db:
-    build: db
-    restart: always
-    container_name: "db"
-    env_file:
-      - backend/.env
+#    command: poetry run gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "5433:5432"
-    networks:
-      - django_network
+      - 1337:8000
+#    restart: unless-stopped
+    volumes:
+      - ./backend:/usr/src/app/
+#      - static_files:/usr/src/app/staticfiles
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=django-insecure-a#8y#ne9bw=h(cpk$c37n8s7i+f+%qlq1y5xdmod0#l6am-34g
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+#    env_file:
+#      - backend/.env
+#    expose:
+#      - 8000
+    depends_on:
+#      - db
+      - redis
+#    networks:
+#      - django_network
 
-networks:
-  django_network:
-    driver: bridge
+#  db:
+#    build: db
+#    restart: always
+#    container_name: "db"
+#    env_file:
+#      - backend/.env
+#    ports:
+#      - "5433:5432"
+#    networks:
+#      - django_network
 
-volumes:
-  static_files:
+  redis:
+    image: "redis:5-alpine"
+    container_name: "redis"
+
+#networks:
+#  django_network:
+#    driver: bridge
+#
+#volumes:
+#  static_files:

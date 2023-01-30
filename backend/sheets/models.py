@@ -1,7 +1,7 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
-from tasks.tasks import create_task_photo_of_pdf
+from sheets.tasks import create_task_photo_of_pdf
 from users.models import User
 
 
@@ -77,7 +77,7 @@ class Sheet(models.Model):
 
     def save(self, *args, **kwargs):
         super(Sheet, self).save(*args, **kwargs)
-        create_task_photo_of_pdf.delay(self.pk, self.file_pdf.path, self.file_pdf.url)
+        create_task_photo_of_pdf.delay(self.pk, self.file_pdf.url, self.file_pdf.path)
 
     class Meta:
         verbose_name = "Sheet"

@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.10.6-alpine
+FROM python:3.10.6
 
 # set work directory
 WORKDIR /usr/src/app
@@ -7,17 +7,23 @@ WORKDIR /usr/src/app
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+#ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app"
 
 # create a directory for staticfiles
 RUN mkdir -p /home/app/staticfiles
 
-# copy poetry.lock and pyproject.toml
-COPY poetry.lock pyproject.toml /usr/src/app/
+# copy requirements.txt
+COPY requirements.txt /usr/src/app/
 
 # install dependencies
 RUN pip3 install --upgrade pip
-RUN pip3 install poetry
-RUN poetry install
+RUN pip3 install -r requirements.txt
+
+# copy entrypoint.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 
 # copy project
-COPY . /usr/src/app
+COPY . /usr/src/app/
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
