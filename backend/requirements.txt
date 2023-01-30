@@ -6,6 +6,8 @@ django-rest-framework==0.1.0
 pypdfium2==3.19.0
 # Celery
 celery==5.2.7
+# Flower
+flower==1.2.0
 # Redis
 redis==4.4.0
 # For pictures

@@ -29,6 +29,7 @@ pypdfium2 = "^3.19.0"
 pillow = "^9.4.0"
 celery = "^5.2.7"
 redis = "^4.4.2"
+flower = "^1.2.0"
 
 
 [build-system]
