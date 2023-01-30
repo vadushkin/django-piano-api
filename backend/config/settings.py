@@ -29,7 +29,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.getenv("DEBUG", "1")))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,api,[::-1]").split(",")
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,api,[::-1]"
+).split(",")
 
 # Application definition
 
@@ -149,9 +151,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.0:8000',
-    'http://localhost:8000',
-    'http://0.0.0.0:8000',
+    "http://127.0.0.0:8000",
+    "http://localhost:8000",
+    "http://0.0.0.0:8000",
 ]
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis:6379/0")

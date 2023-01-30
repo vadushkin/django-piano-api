@@ -11,7 +11,7 @@ from .serializers import UserSerializer
 
 
 class GetRoutesView(APIView):
-    def get(self, request):
+    def get(self, _):
         routes = [
             {
                 "Endpoint": "/register/",
@@ -113,10 +113,10 @@ class UserView(APIView):
 
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("Unauthenticated!")
-        except jwt.InvalidSignatureError:
-            raise AuthenticationFailed("Token expired! Please logout and then authenticate!")
+        except (jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
+            raise AuthenticationFailed(
+                "Token expired! Please logout and then authenticate!"
+            )
 
         user = User.objects.filter(id=payload["id"]).first()
         serializer = UserSerializer(user)

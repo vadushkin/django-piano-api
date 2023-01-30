@@ -1,5 +1,3 @@
-import time
-
 from celery import shared_task
 import pypdfium2 as pdfium
 
@@ -18,6 +16,7 @@ def create_task_photo_of_pdf(pk, url, path):
     page.close()
     # add new phone in Model
     from sheets.models import Sheet
+
     Sheet.objects.filter(pk=pk).update(photo=f"{url[:-4]}.jpg")
 
     return True

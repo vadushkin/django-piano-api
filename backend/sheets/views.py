@@ -1,4 +1,3 @@
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -14,7 +13,6 @@ from .serializers import (
 from .services import _get_routes, get_current_user
 
 
-@csrf_exempt
 @api_view(["GET"])
 def get_routes(_):
     routes = _get_routes()
@@ -83,6 +81,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.user = get_current_user(request)
         return super().create(request, *args, **kwargs)
+
 
 # @api_view(["GET", "POST"])
 # def get_sheets(request):
