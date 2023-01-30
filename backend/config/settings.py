@@ -30,7 +30,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = bool(int(os.getenv("DEBUG", "1")))
 
 ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,api,[::-1]"
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,0.0.0.0,api,[::-1]",
 ).split(",")
 
 # Application definition

@@ -115,7 +115,7 @@ class UserView(APIView):
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         except (jwt.ExpiredSignatureError, jwt.InvalidSignatureError):
             raise AuthenticationFailed(
-                "Token expired! Please logout and then authenticate!"
+                "Token expired! Please logout and then authenticate!",
             )
 
         user = User.objects.filter(id=payload["id"]).first()

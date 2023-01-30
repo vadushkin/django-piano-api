@@ -7,7 +7,7 @@ stop:
 	docker-compose stop
 
 csu:
-	docker exec -it backend poetry run python manage.py createsuperuser
+	docker exec -it backend python manage.py createsuperuser
 
 migrate:
-	docker exec -it backend poetry run python manage.py migrate
+	docker exec -it backend python manage.py migrate
